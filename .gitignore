@@ -1,0 +1,8 @@
+!debian
+/build
+tags
+*~
+.*
+!.gitignore
+!.clang-tidy
+!.clang-format
