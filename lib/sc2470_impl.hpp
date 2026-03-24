@@ -100,14 +100,10 @@ public:
 
     void set_tx_tune_args(const uhd::device_addr_t& args, const size_t chan) override
     {
-        // const uhd::fs_path udc_fe_path = _get_udc_fe_path(chan, uhd::direction_t::TX_DIRECTION);
-        // _tree->access<double>(udc_fe_path / "if_freq" / "value")
-        //     .set(args.get("if_freq"));
     }
 
     void set_rx_tune_args(const uhd::device_addr_t& args, const size_t chan) override
     {
-        
     }
 
     std::vector<std::string> get_tx_gain_names(const size_t) const override
@@ -428,6 +424,7 @@ public:
     double get_udc_tx_gain(const size_t chan) override;
     double get_fe_rx_gain(const size_t chan) override;
     double get_fe_tx_gain(const size_t chan) override;
+    bool get_is_connected(const size_t chan) override;
     uhd::gain_range_t get_safe_fe_gain_range(const uhd::direction_t dir, const path& path);
 
 

@@ -279,6 +279,10 @@ void udc_ctrl::validate_freq_set(freq_set& freqs)
 
 }
 
+uhd::gain_range_t udc_ctrl::get_overall_gain_range(const path& path, uhd::gain_range_t fe_gain_range) {
+    uhd::gain_range_t udc_gain_range = path.trx ? get_tx_gain_range(path.chan) : get_rx_gain_range(path.chan);
+    return uhd::gain_range_t(udc_gain_range.start() + fe_gain_range.start(), udc_gain_range.stop() + fe_gain_range.stop(), udc_gain_range.step());
+}
 uhd::gain_range_t udc_ctrl::get_safe_fe_gain_range(const path& path, uhd::gain_range_t fe_gain_range, uhd::gain_range_t fe_power_range) {
     double max_safe_fe_gain = path.trx ? std::floor(TX_IN_ABS_MAX_POWER + fe_gain_range.start() - fe_power_range.start()) : 1000;
     double min_safe_fe_gain = path.trx ? -1000 : std::ceil(-1.0 * ZBX_RX_OUT_MAX_POWER + fe_power_range.stop() - fe_gain_range.start()); 
@@ -312,6 +316,10 @@ uhd::gain_range_t udc_ctrl::get_safe_udc_power_range(const bool hi_power_protect
     return path.trx ? uhd::gain_range_t(safe_fe_power_range.start() + safe_udc_gain_range.start(), safe_fe_power_range.stop() + safe_udc_gain_range.stop(), safe_udc_gain_range.step())
                   : uhd::gain_range_t(safe_fe_power_range.start() - safe_udc_gain_range.stop(),
                         safe_fe_power_range.stop() - safe_udc_gain_range.start(), safe_udc_gain_range.step());
+}
+
+bool udc_ctrl::get_is_connected(const size_t chan) {
+    return _phy->is_connected(chan);
 }
 
 } // namespace udc

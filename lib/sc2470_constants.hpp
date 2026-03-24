@@ -23,17 +23,15 @@ static constexpr double TX_DEFAULT_POWER_REF = -60;
 // The ZBX is capable of TX output power levels exceeding the UDC TX input no-damage
 // specification of 5 dBm. For good measure, back this off by another 5 dB.
 static constexpr double TX_IN_ABS_MAX_POWER = 0;
-// TODO: Update this based on recent SCM discoveries
-//! JKEELING - Not sure what the SCM discovery was but scm is set to TX_IN_TYP_MAX_POWER = -5 + ((8 + 15) / 2);
-//! Will revisit this cutoff point when we have HW
+
 // The X410 specification indicates the TX EVM is optimized between -15 and 5 dBm for a 5G
 // NR 100 MHz waveform. Limiting the ZBX output power to -10 dBm provides a margin for other
 // waveform types. The UDC has sufficient TX gain to increase the ZBX output level up to
 // the UDC TX output power specification (Linear Power assuming 10 dB PAR).
 static constexpr double ZBX_TX_IN_TYP_MAX_POWER = -10;
+
 // The X410 specification states a maximum RX input power of 0 dBm.
-// The X440 specification states a maximum RX input power of 10 dBm.
-// Use the lower of the two for now.
+// The X440 specification states a maximum RX input power of 10 dBm but doesn't support power ref so cannot be controlled.
 static constexpr double ZBX_RX_OUT_MAX_POWER = 0;
 
 // TX/RX Antennas controlled simultaneously

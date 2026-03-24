@@ -519,6 +519,12 @@ double sc2470_impl::get_fe_tx_gain(const size_t chan)
     return overallGain - udcGain;
 }
 
+bool sc2470_impl::get_is_connected(const size_t chan)
+{
+    return _udc->get_is_connected(chan);
+}
+
+
 
 } // namespace udc
 

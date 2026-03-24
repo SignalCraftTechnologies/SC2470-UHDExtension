@@ -64,17 +64,18 @@ public:
 
     uint32_t direct_io(const size_t chan, const uint32_t data);
 
+    uhd::gain_range_t get_overall_gain_range(const path& path, uhd::gain_range_t fe_gain_range);
     uhd::gain_range_t get_safe_fe_gain_range(const path& path, uhd::gain_range_t fe_gain_range, uhd::gain_range_t fe_power_range);
     uhd::gain_range_t get_safe_fe_power_range(const path& path, uhd::gain_range_t fe_power_range);
     double get_zero_gain_power_reference(const path& path, uhd::gain_range_t fe_gain_range, uhd::gain_range_t fe_power_range);
     uhd::gain_range_t get_safe_udc_gain_range(const bool hi_power_protection, const path& path);
     uhd::gain_range_t get_safe_overall_gain_range(const bool hi_power_protection, const uhd::gain_range_t& safe_fe_gain_range, const path& path);
     uhd::gain_range_t get_safe_udc_power_range(const bool hi_power_protection, const uhd::gain_range_t& safe_fe_power_range, const path& path);
+    bool get_is_connected(const size_t chan);
 
 private:
     void set_active_path(const path& path);
     void set_lo_active_path(const path& path);
-    void set_conv_gain(const path& path, const double voltage_mV);
     void validate_freq_set(freq_set& freqs);
     freq_set get_freqs(const path& path);
 

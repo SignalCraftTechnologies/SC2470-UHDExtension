@@ -185,6 +185,7 @@ void zbx_gain_expert::resolve(void)
 
     // calculate ranges and safe gain maximums
     uhd::gain_range_t fe_gain_range = _path.trx ? _radio->get_tx_gain_range(_path.chan) : _radio->get_rx_gain_range(_path.chan);
+    uhd::gain_range_t overall_gain_range = _udc->get_overall_gain_range(_path, fe_gain_range);
     uhd::gain_range_t fe_power_range = _path.trx ? _radio->get_tx_power_range(_path.chan) : _radio->get_rx_power_range(_path.chan);
     uhd::gain_range_t safe_fe_gain_range =  _udc->get_safe_fe_gain_range(_path, fe_gain_range, fe_power_range);
     uhd::gain_range_t safe_fe_power_range =  _udc->get_safe_fe_power_range(_path, fe_power_range);
@@ -204,7 +205,13 @@ void zbx_gain_expert::resolve(void)
     // (TX-only) first use fe gain to step to ZBX_TX_IN_TYP_MAX_POWER
     // then use SC2470 gain to max
     // Then continue increase fe gain
+    double unsafe_total_gain = utility::fixed_uhd_meta_range_clip(overall_gain_range, total_gain, true);
     total_gain = utility::fixed_uhd_meta_range_clip(safe_overall_gain_range, total_gain, true);
+    if(_high_power_prot_in && ((unsafe_total_gain - total_gain) > (safe_udc_gain_range.step() / 2.0))) {
+        std::stringstream msg;
+        msg << "High Power Protection is enabled.  " << (_path.trx ? "TX" : "RX") << " gain is being limited. See documentation or contact SCT for details.";
+        UHD_LOG_WARNING(udc::NAME, msg.str());
+    }
     double udc_gain = safe_udc_gain_range.start();
     double fe_gain = safe_fe_gain_range.start();
     double excess_gain = total_gain - udc_gain - fe_gain;
@@ -229,6 +236,7 @@ void zbx_gain_expert::resolve(void)
     double udc_fractional_gain = std::min(safe_udc_gain_range.stop() - udc_gain, remaining_gain >= safe_udc_gain_range.step() / 2.0 ? safe_udc_gain_range.step() : 0.0);
     udc_gain += udc_fractional_gain;
     remaining_gain -= udc_fractional_gain;
+    double max_unsafe_udc_gain = (_path.trx ? _udc->get_tx_gain_range(_path.chan) : _udc->get_rx_gain_range(_path.chan)).stop();
 
     _path.trx ? _radio->set_tx_gain(fe_gain, chan) : _radio->set_rx_gain(fe_gain, chan);
     

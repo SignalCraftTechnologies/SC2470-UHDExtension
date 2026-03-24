@@ -215,6 +215,12 @@ public:
     */
     virtual double get_fe_tx_gain(const size_t chan) = 0;
 
+    /*!
+     * Queries whether the channel is able to communicate with the SC2470 through
+     * the HDMI cable's SPI connection.
+     * \returns Whether the channel is connected
+    */
+    virtual bool get_is_connected(const size_t chan) = 0;
 
 };
 
