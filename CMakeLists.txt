@@ -52,8 +52,31 @@ add_subdirectory(include)
 message(STATUS "UHD Module Path (to which the extension will be linked):")
 message(STATUS ${UHD_MODULE_PATH})
 
-### Make the executable #######################################################
 add_library(sc2470 SHARED ${sc2470_sources})
+
+### examples
+
+add_executable(
+    usrp
+    example/usrp.cpp
+)
+
+add_executable(
+    rfnoc
+    example/rfnoc.cpp
+)
+
+target_link_libraries(
+  usrp
+  uhd
+  sc2470
+)
+
+target_link_libraries(
+  rfnoc
+  uhd
+  sc2470
+)
 
 ### Install ###################################################################
 set(extension_target ${CMAKE_INSTALL_PREFIX}/lib/libsc2470.so)

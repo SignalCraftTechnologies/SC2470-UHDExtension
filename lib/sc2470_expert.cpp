@@ -84,7 +84,7 @@ void udc_freq_expert::resolve(void)
     UHD_LOG_DEBUG(udc::NAME, _path << " udc_freq_expert: Resolved UDC Bypass: " << _udc_bypass_out);
     UHD_LOG_DEBUG(udc::NAME, _path << " udc_freq_expert: Resolved RF: " << _rf_frequency_out);
     UHD_LOG_DEBUG(udc::NAME, _path << " udc_freq_expert: Resolved IF: " << _if_frequency_out);
-    UHD_LOG_DEBUG(udc::NAME, _path << " udc_freq_expert: Resolved IF: " << _lo_frequency_out);
+    UHD_LOG_DEBUG(udc::NAME, _path << " udc_freq_expert: Resolved LO: " << _lo_frequency_out);
 }
 
 uhd::freq_range_t udc_freq_expert::calc_non_bypass_if_range(double rf_freq) {
